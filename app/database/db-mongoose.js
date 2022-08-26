@@ -16,7 +16,7 @@ const companySchema = new Schema({
   slug: {
     type: String,
     required: [true, 'Pole slug jest wymagane'],
-    minLength: [3, 'Minimalna liczba znaków to 3'],
+    minLength: [2, 'Minimalna liczba znaków dla pola slug to 2'],
     validate: value => checkForbidenString(value, 'slug'),
     trim: true,
     lowercase: true,
@@ -24,29 +24,29 @@ const companySchema = new Schema({
   name: {
     type: String,
     required: [true, 'Pole name jest wymagane'],
+    minLength: [3, 'Minimalna liczba znaków dla pola name to 3']
   },
   employeesCount: {
     type: Number,
-    min: 1,
+    min: [1, "Liczba pracowników musi być dodatnia"],
     default: 1,
   }
 }, {collection: "companies"});
 
 const Company = mongoose.model('Company', companySchema);
 
-async function insert() {
-  const company = new Company({
-    name: 'Probox',
-    slug: '   ProBox  ',
-  });
 
-  try {
-    await company.save();
-  } catch (e) {
-    console.log('Coś poszło nie tak...');
-    for (const key in e.errors) {
-      console.log(e.errors[key].message);
-    }
+const addCompany = async (data) => {
+  const newCompany = new Company({
+    slug: data.slug,
+    name: data.name,
+    employeesCount: data.employeesCount
+  });
+  try{
+  await newCompany.save();
+  }
+  catch(err){
+    throw err;
   }
 }
 
@@ -60,10 +60,8 @@ const getCompany = async (companyName) => {
   return result;
 }
 
-//insert();
-//exports.getCompanies = getCompanies;
-
 module.exports = {
   getCompanies,
-  getCompany
+  getCompany,
+  addCompany,
 }

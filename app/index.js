@@ -16,11 +16,15 @@ app.set('layout', 'layouts/main');
 // public folder
 app.use(express.static('public'));
 
+// set up body parser
+app.use(express.urlencoded({ extended: true }));
+
 // middleware passing URL to render engine
 app.use('/', require('./middleware/view-variables'))
 
 // set up routes (this must be here, after setting up views etc.)
 app.use(require('./routes/web'));
+
 
 app.listen(port, () => {
   console.log(`Aplikacja dziala na porcie ${port}`)

@@ -12,7 +12,11 @@
           <a class="nav-link <%- url === '/' ? 'active' : '' %>" href="/">Strona główna</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link <%- url.includes('/firmy') ? 'active' : '' %>" href="/firmy/tworcastron">Firmy</a>
+          <a class="nav-link <%- url.includes('/firmy') ? 'active' : '' %>" href="/firmy">Firmy</a>
+        </li>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link <%- url === '/admin/addcompany' ? 'active' : '' %>" href="/admin/addcompany">Dodaj firmę</a>
         </li>
       </ul>
     </div>
