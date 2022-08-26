@@ -43,7 +43,10 @@ class PageController {
       res.redirect('/firmy');
     }
     catch(err){
-      res.render('pages/companies/addcompany', {errors: err.errors});
+      res.render('pages/companies/addcompany', {
+        errors: err.errors,
+        form: req.body
+      });
     }
   }
 

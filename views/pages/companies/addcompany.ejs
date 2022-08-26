@@ -2,10 +2,13 @@
     <div class="form-group">
         <label for="name">Nazwa firmy</label>
         <input type="text" id="name" name="name" placeholder="Podaj nazwę firmy" class="form-control
-        <% if (errors?.name) { %>
-            is-invalid
-        <% } %>
-        " required>
+            <% if (errors?.name) { %>
+                is-invalid
+            <% } %>"
+            <% if (form) {%>
+                value="<%= form.name%>"
+            <% } %>
+        required>
         <% if (errors?.name) { %>
             <div class='invalid-feedback'><%= errors.name.message %></div>
         <% } %>
@@ -13,10 +16,13 @@
         <div class="form-group">
         <label for="slug">Slug</label>
         <input type="text" id="slug" name="slug" placeholder="Slug" class="form-control
-        <% if (errors?.slug) { %>
-            is-invalid
-        <% } %>
-        " required>
+            <% if (errors?.slug) { %>
+                is-invalid
+            <% } %>"
+            <% if (form) {%>
+                value="<%= form.slug%>"
+            <% } %>
+        required>
         <% if (errors?.slug) { %>
             <div class='invalid-feedback'><%= errors.slug.message %></div>
         <% } %>
@@ -25,10 +31,13 @@
     <div class="form-group">
         <label for="employees">Liczba pracowników</label>
         <input type="number" id="employees" name="employeesCount" class="form-control
-        <% if (errors?.employeesCount) { %>
-            is-invalid
-        <% } %>
-        ">
+            <% if (errors?.employeesCount) { %>
+                is-invalid
+            <% } %>"
+            <% if (form) {%>
+                value="<%= form.employeesCount%>"
+            <% } %>
+        >
         <% if (errors?.employeesCount) { %>
             <div class='invalid-feedback'><%= errors.employeesCount.message %></div>
         <% } %>
