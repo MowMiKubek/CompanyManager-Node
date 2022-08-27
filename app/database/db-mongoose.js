@@ -50,13 +50,34 @@ const addCompany = async (data) => {
   }
 }
 
+const editCompany = async (slug, update) => {
+  const company = await Company.findOne({slug: slug});
+  company.name = update.name;
+  company.slug = update.slug;
+  company.employeesCount = update.employeesCount;
+  try{
+    await company.save();
+  }
+  catch(err){
+    throw err;
+  }
+}
+
+const deleteCompany = async (slug) => {
+  try{
+    await Company.findOneAndDelete({slug: slug});
+  }catch (err){
+    throw errl
+  }
+}
+
 const getCompanies = async () => {
   const result = await Company.find({});
   return result;
 }
 
 const getCompany = async (companyName) => {
-  const result = await Company.find({slug: companyName});
+  const result = await Company.findOne({slug: companyName});
   return result;
 }
 
@@ -64,4 +85,6 @@ module.exports = {
   getCompanies,
   getCompany,
   addCompany,
+  editCompany,
+  deleteCompany
 }

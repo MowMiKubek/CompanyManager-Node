@@ -1,8 +1,17 @@
-<% if (companies.find(x => x.slug === name)) { %>
-  <h1>Firma: <%= name %></h1>
+<% const currentCompany = companies.find(x => x.slug === name) %>
+<% if (currentCompany) { %>
+  <h1>Firma: <%= currentCompany.name %> (aka <%= currentCompany.slug %>)</h1>
+  <h3>Liczba pracowników: <%= currentCompany.employeesCount %></h3>
 <% } else { %>
   <h1>Nie ma takiej firmy</h1>
 <% } %>
+
+<h2>Zarządzaj firmą</h2>
+<div class="d-flex">
+  <a class="link-warning px-1" href="/admin/<%= name%>/editcompany">Edytuj dane firmy</a>
+  <a class="link-danger px-1" onclick='return confirm("Czy na pewno chcesz usunąć firmę?")' 
+  href="/admin/<%= name%>/deletecompany">Usuń firmę (jeszcze nie działa)</a>
+</div>
 
 <h2>Pozostałe firmy: </h2>
 

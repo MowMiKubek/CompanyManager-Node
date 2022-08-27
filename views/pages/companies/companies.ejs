@@ -1,5 +1,20 @@
-<ul>
+<h1>Lista firm</h1>
+<div class="d-flex justify-content-evenly flex-wrap">
+  <% if (companies.length == 0) {%>
+    <h2>Nie ma jeszcze żadnej firmy</h2>  
+  <% } %>
   <% companies.forEach(company => { %>
-    <li><a href="/firmy/<%= company.slug %>"><%= company.name %></a></li>
+    <div class="card bg-light m-2">
+      <div class="card-body">
+        <div class="card-title"><%= company.name %></div>
+        <div class="card-subtitle"><%= company.slug %></div>
+      </div>
+      <div class="d-flex flex-row">
+        <a class="btn btn-primary" href="/firmy/<%= company.slug %>">Zobacz</a>
+        <a class="btn btn-warning" href="/admin/<%= company.slug %>/editcompany">Edytuj</a>
+        <a class="btn btn-danger" onclick='return confirm("Czy na pewno chcesz usunąć firmę?")'
+        href="/admin/<%= company.slug %>/deletecompany">Usuń</a>
+      </div>
+    </div>
   <% }); %>
-</ul>
+</div>
