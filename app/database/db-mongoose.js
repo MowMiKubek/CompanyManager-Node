@@ -67,7 +67,7 @@ const deleteCompany = async (slug) => {
   try{
     await Company.findOneAndDelete({slug: slug});
   }catch (err){
-    throw errl
+    throw err;
   }
 }
 
@@ -76,8 +76,13 @@ const getCompanies2 = async () => {
   return result;
 }
 
-const getCompanies = async (q) => {
-  const result = await Company.find({ name: {$regex: q, $options: 'i'} });
+const getCompanies = async (q, sort) => {
+  let query = Company.find({ name: {$regex: q || '', $options: 'i'} });
+  if(sort){
+    const s = sort.split('|');
+    query = query.sort({ [s[0]]: s[1] });
+  }
+  const result = await query.exec();
   return result;
 }
 

@@ -13,9 +13,9 @@ class PageController {
   }
 
   companiesRoute = async (req, res) => {
-    const { q } = req.query;
+    const { q, sort } = req.query;
       let queryResult;
-      queryResult = await databaseQuery.getCompanies(q);
+      queryResult = await databaseQuery.getCompanies(q, sort);
       const companies = queryResult.map((company) => {
         const {slug, name} = company;
         return {slug, name};

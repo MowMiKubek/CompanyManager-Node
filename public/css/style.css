@@ -2,6 +2,7 @@
   max-height: 40px;
 }
 
-#firma {
-  max-width: 210px;
+body{
+  background: rgb(25,216,255);
+background: linear-gradient(90deg, rgba(25,216,255,1) 0%, rgba(108,100,255,1) 100%);
 }
