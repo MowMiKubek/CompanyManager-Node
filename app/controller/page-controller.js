@@ -13,13 +13,10 @@ class PageController {
   }
 
   companiesRoute = async (req, res) => {
-    const { q, sort } = req.query;
+    const { q, sort, countmin, countmax } = req.query;
       let queryResult;
-      queryResult = await databaseQuery.getCompanies(q, sort);
-      const companies = queryResult.map((company) => {
-        const {slug, name} = company;
-        return {slug, name};
-      });
+      queryResult = await databaseQuery.getCompanies(q, sort, countmin, countmax);
+      const companies = queryResult.map(this.truncateCompany);
       res.render('pages/companies/companies', { 
         companies
       });

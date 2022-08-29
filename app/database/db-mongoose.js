@@ -71,13 +71,17 @@ const deleteCompany = async (slug) => {
   }
 }
 
-const getCompanies2 = async () => {
-  const result = await Company.find({});
-  return result;
-}
-
-const getCompanies = async (q, sort) => {
-  let query = Company.find({ name: {$regex: q || '', $options: 'i'} });
+const getCompanies = async (q, sort, countmin, countmax) => {
+  let queryParams = {};
+  if(q) { queryParams.name = {$regex: q, $options: 'i'}; }
+  if(sort) { queryParams.sort = sort; }
+  if(countmin || countmax){
+    queryParams.employeesCount = {};
+    if(countmin) { queryParams.employeesCount.$gte = countmin; }
+    if(countmax) { queryParams.employeesCount.$lte = countmax; }
+  }
+  console.log(queryParams);
+  let query = Company.find(queryParams);  
   if(sort){
     const s = sort.split('|');
     query = query.sort({ [s[0]]: s[1] });
@@ -93,7 +97,6 @@ const getCompany = async (companyName) => {
 
 module.exports = {
   getCompanies,
-  //getSomeCompanies,
   getCompany,
   addCompany,
   editCompany,

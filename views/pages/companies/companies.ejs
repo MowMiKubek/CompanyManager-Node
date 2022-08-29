@@ -1,36 +1,29 @@
 <h1>Lista firm</h1>
   <form>
-  <%- include('partials/search.ejs') %>
-
-  <div class="row">
-    <div class="col-3">
-    <p>Sortuj wg</p>
-    <select name="sort" id="" class="form-control">
-      <option value="">Domyślnie</option>
-      <option value="name|asc" <%- query.sort === 'name|asc' ? 'selected': '' %>>A-z</option>
-      <option value="name|desc" <%- query.sort === 'name|desc' ? 'selected': '' %>>Z-a</option>
-      <option value="employeesCount|asc" <%- query.sort === 'employeesCount|asc' ? 'selected': '' %>>Pracowników (rosnąco)</option>
-      <option value="employeesCount|desc" <%- query.sort === 'employeesCount|desc' ? 'selected': '' %>>Pracowników (malejąco)</option>
-    </select>
-    <button class="btn btn-primary mt-3">Sortuj</button>
+      <%- include('partials/search.ejs') %>
+    <div class="row">
+      <div class="col-3">
+        <%- include('partials/filter.ejs') %>
+      </div>
+      <div class="col-9">
+          <% if (companies.length == 0) {%>
+            <h2>Nie ma jeszcze żadnej firmy</h2>  
+          <% } %>
+          <% companies.forEach(company => { %>
+            <div class="card bg-light mb-3" id="firma">
+              <div class="card-body">
+                <div class="card-title"><%= company.name %></div>
+                <div class="card-subtitle text-muted"><%= company.slug %></div>
+                <p>Pracowników: <%= company.employeesCount %></p>
+                <a class="btn btn-primary" href="/firmy/<%= company.slug %>">Zobacz</a>
+                <a class="btn btn-warning" href="/admin/<%= company.slug %>/editcompany">Edytuj</a>
+                <a class="btn btn-danger" onclick='return confirm("Czy na pewno chcesz usunąć firmę?")'
+                href="/admin/<%= company.slug %>/deletecompany">Usuń</a>
+              </div>
+            </div>
+          <% }); %>
+       </div>
+    </div>
   </form>
-  </div>
-  <div class="col-9">
-      <% if (companies.length == 0) {%>
-        <h2>Nie ma jeszcze żadnej firmy</h2>  
-      <% } %>
-      <% companies.forEach(company => { %>
-        <div class="card bg-light mb-3" id="firma">
-          <div class="card-body">
-            <div class="card-title"><%= company.name %></div>
-            <div class="card-subtitle"><%= company.slug %></div>
-            <a class="btn btn-primary" href="/firmy/<%= company.slug %>">Zobacz</a>
-            <a class="btn btn-warning" href="/admin/<%= company.slug %>/editcompany">Edytuj</a>
-            <a class="btn btn-danger" onclick='return confirm("Czy na pewno chcesz usunąć firmę?")'
-            href="/admin/<%= company.slug %>/deletecompany">Usuń</a>
-          </div>
-        </div>
-      <% }); %>
-  </div>
 </div>
 
