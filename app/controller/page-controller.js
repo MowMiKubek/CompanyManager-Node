@@ -13,8 +13,9 @@ class PageController {
   }
 
   companiesRoute = async (req, res) => {
-      console.log(req.url);
-      const queryResult = await databaseQuery.getCompanies();
+    const { q } = req.query;
+      let queryResult;
+      queryResult = await databaseQuery.getCompanies(q);
       const companies = queryResult.map((company) => {
         const {slug, name} = company;
         return {slug, name};

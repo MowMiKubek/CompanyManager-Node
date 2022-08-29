@@ -71,8 +71,13 @@ const deleteCompany = async (slug) => {
   }
 }
 
-const getCompanies = async () => {
+const getCompanies2 = async () => {
   const result = await Company.find({});
+  return result;
+}
+
+const getCompanies = async (q) => {
+  const result = await Company.find({ name: {$regex: q, $options: 'i'} });
   return result;
 }
 
@@ -83,6 +88,7 @@ const getCompany = async (companyName) => {
 
 module.exports = {
   getCompanies,
+  //getSomeCompanies,
   getCompany,
   addCompany,
   editCompany,

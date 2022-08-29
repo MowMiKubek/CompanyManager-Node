@@ -1,10 +1,11 @@
 <h1>Lista firm</h1>
+<%- include('partials/search.ejs') %>
 <div class="d-flex justify-content-evenly flex-wrap">
   <% if (companies.length == 0) {%>
     <h2>Nie ma jeszcze żadnej firmy</h2>  
   <% } %>
   <% companies.forEach(company => { %>
-    <div class="card bg-light m-2">
+    <div class="card bg-light m-2" id="firma">
       <div class="card-body">
         <div class="card-title"><%= company.name %></div>
         <div class="card-subtitle"><%= company.slug %></div>
