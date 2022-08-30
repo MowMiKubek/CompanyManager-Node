@@ -71,22 +71,37 @@ const deleteCompany = async (slug) => {
   }
 }
 
-const getCompanies = async (q, sort, countmin, countmax) => {
+const getCompanies = async (params, perPage) => {
+  const { q, sort, countmin, countmax, page } = params;
   let queryParams = {};
+
+  // search
   if(q) { queryParams.name = {$regex: q, $options: 'i'}; }
+
+  // sort
   if(sort) { queryParams.sort = sort; }
+
+  // filter
   if(countmin || countmax){
     queryParams.employeesCount = {};
     if(countmin) { queryParams.employeesCount.$gte = countmin; }
     if(countmax) { queryParams.employeesCount.$lte = countmax; }
   }
-  console.log(queryParams);
-  let query = Company.find(queryParams);  
+
+  // pagination
+  let query = Company.find(queryParams);
+  query.skip((page-1) * perPage);
+  query = query.limit(perPage);
+
   if(sort){
     const s = sort.split('|');
     query = query.sort({ [s[0]]: s[1] });
   }
+
+  // exec
   const result = await query.exec();
+  const resultsCount = await Company.find(queryParams).count();
+  result.push(resultsCount)
   return result;
 }
 
@@ -100,5 +115,6 @@ module.exports = {
   getCompany,
   addCompany,
   editCompany,
-  deleteCompany
+  deleteCompany,
+  Company
 }

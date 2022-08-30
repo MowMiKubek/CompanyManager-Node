@@ -13,13 +13,22 @@ class PageController {
   }
 
   companiesRoute = async (req, res) => {
-    const { q, sort, countmin, countmax } = req.query;
-      let queryResult;
-      queryResult = await databaseQuery.getCompanies(q, sort, countmin, countmax);
-      const companies = queryResult.map(this.truncateCompany);
-      res.render('pages/companies/companies', { 
-        companies
-      });
+    const page = req.query.page || 1;
+    const perPage = 2;
+    const queryResult = await databaseQuery.getCompanies(req.query, perPage);
+    
+    // get results from DB. Last is number how many records there are
+    const resultsCount = queryResult[queryResult.length-1];
+    queryResult.pop();
+
+    const pagesCount = Math.ceil(resultsCount / perPage);
+
+    res.render('pages/companies/companies', { 
+      companies: queryResult,
+      page,
+      pagesCount,
+      resultsCount
+    });
   };
 
   companyRoute = async (req, res) => {
