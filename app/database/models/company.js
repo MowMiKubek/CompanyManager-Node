@@ -1,7 +1,7 @@
 const mongoose = require('mongoose')
 const Schema = mongoose.Schema;
 
-const checkForbidenString = require('../validators.js');
+const {checkForbidenString} = require('../validators.js');
 
 // Company model
 const companySchema = new Schema({
@@ -105,6 +105,4 @@ getCompany = async (companyName) => {
 
 const Company = mongoose.model('Company', companySchema);
 const companyController = new CompanyController();
-module.exports = {
-    companyController
-}
+module.exports = companyController;

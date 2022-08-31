@@ -1,4 +1,4 @@
-const databaseQuery = require('../database/db-mongoose.js')
+const {companyController} = require('../database/db-mongoose.js')
 
 class PageController {
   homeRoute = (req, res) => {
@@ -15,7 +15,7 @@ class PageController {
   companiesRoute = async (req, res) => {
     const page = req.query.page || 1;
     const perPage = 2;
-    const queryResult = await databaseQuery.getCompanies(req.query, perPage);
+    const queryResult = await companyController.getCompanies(req.query, perPage);
     
     // get results from DB. Last is number how many records there are
     const resultsCount = queryResult[queryResult.length-1];
@@ -32,7 +32,7 @@ class PageController {
   };
 
   companyRoute = async (req, res) => {
-      const queryResult = await databaseQuery.getCompanies();
+      const queryResult = await companyController.getCompanies();
       const companies = queryResult.map(this.truncateCompany);
       const name = req.params.name;
       console.log(name, companies);
@@ -48,7 +48,7 @@ class PageController {
 
   addCompany = async (req, res) => {
     try{
-      await databaseQuery.addCompany(req.body);
+      await companyController.addCompany(req.body);
       res.redirect('/firmy');
     }
     catch(err){
@@ -60,7 +60,7 @@ class PageController {
   }
 
   showEditCompany = async (req, res) => {
-    let result = await databaseQuery.getCompany(req.params.name); // name as slug
+    let result = await companyController.getCompany(req.params.name); // name as slug
     if(!result) {
       res.redirect('/firmy');
       return;
@@ -72,7 +72,7 @@ class PageController {
 
   editCompany = async (req, res) => {
     try{
-      await databaseQuery.editCompany(req.params.name, req.body);
+      await companyController.editCompany(req.params.name, req.body);
       res.redirect('/firmy');
     }
     catch(err){
@@ -85,7 +85,7 @@ class PageController {
 
   deleteCompany = async (req, res) => {
     try{
-      databaseQuery.deleteCompany(req.params.name);
+      companyController.deleteCompany(req.params.name);
     }
     catch(err){
       console.log("Wystąpił jakiś nieszkodliwy błąd");
