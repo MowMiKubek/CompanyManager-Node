@@ -15,7 +15,14 @@ class UserController{
             res.redirect('/');
         }
         catch(e){
-            console.log("wystapil blad user", e.errors);
+            if (e?.name === 'MongoServerError' && e?.code === 11000) {
+                const error = {email: {message: "Podany email jest zajęty"}};
+                console.log(error.email);
+                res.render('pages/auth/register',{
+                    errors: error
+                });
+                return;
+            };
             res.render('pages/auth/register', {
                 errors: e.errors,
                 form: req.body
