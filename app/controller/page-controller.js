@@ -3,7 +3,8 @@ const {companyController} = require('../database/db-mongoose.js')
 class PageController {
   homeRoute = (req, res) => {
     res.render('pages/home', {
-      title: 'Strona główna'
+      title: 'Strona główna',
+      user: req.session.user
     });
   }
 

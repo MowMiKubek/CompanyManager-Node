@@ -1,29 +1,5 @@
-const express = require('express');
 const { port } = require('./config.js')
-const path = require('path');
-const ejsLayouts = require('express-ejs-layouts');
-
-const app = express();
-
-// view engine
-app.set('view engine', 'ejs');
-app.set('views', path.join(__dirname + '/../views'));
-
-// set layout
-app.use(ejsLayouts);
-app.set('layout', 'layouts/main');
-
-// public folder
-app.use(express.static('public'));
-
-// set up body parser
-app.use(express.urlencoded({ extended: true }));
-
-// middleware passing URL to render engine
-app.use('/', require('./middleware/view-variables'))
-
-// set up routes (this must be here, after setting up views etc.)
-app.use(require('./routes/web'));
+const app = require('./app');
 
 
 app.listen(port, () => {

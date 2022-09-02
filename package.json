@@ -12,11 +12,14 @@
   "license": "ISC",
   "type": "commonjs",
   "dependencies": {
+    "bcrypt": "^5.0.1",
     "chalk": "^3.0.0",
+    "cookie-parser": "^1.4.6",
     "dotenv": "^16.0.1",
     "ejs": "^3.1.6",
     "express": "^4.17.1",
     "express-ejs-layouts": "^2.5.0",
+    "express-session": "^1.17.3",
     "mongoose": "^6.5.2"
   },
   "devDependencies": {

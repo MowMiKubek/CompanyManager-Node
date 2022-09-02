@@ -15,19 +15,43 @@ class UserController{
             res.redirect('/');
         }
         catch(e){
-            if (e?.name === 'MongoServerError' && e?.code === 11000) {
-                const error = {email: {message: "Podany email jest zajęty"}};
-                console.log(error.email);
-                res.render('pages/auth/register',{
-                    errors: error
-                });
-                return;
-            };
             res.render('pages/auth/register', {
                 errors: e.errors,
                 form: req.body
             });
         }
+    }
+
+    showLogin = (req, res) => {
+        res.render('pages/auth/login.ejs');
+    }
+
+    login = async (req, res) => {
+        try{
+            const user = await User.findOne({ email: req.body.email });
+            if(!user) 
+                throw new Error('');
+                
+            const isValidPass = true; //user.checkPassword(req.body.password);
+            if(!isValidPass)
+                throw new Error('');
+            // login
+            req.session.user = {
+                email: user.email,
+                _id: user._id
+            }
+            res.redirect('/');
+        }catch(e){
+            res.render('pages/auth/login', {
+                form: req.body,
+                errors: true
+            });
+            return;
+        }
+        
+        
+        
+        
     }
 }
 
