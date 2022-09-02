@@ -33,12 +33,10 @@ class PageController {
   };
 
   companyRoute = async (req, res) => {
-      const queryResult = await companyController.getCompanies();
-      const companies = queryResult.map(this.truncateCompany);
       const name = req.params.name;
-      console.log(name, companies);
+      const currentCompany = await companyController.getCompany(name); // name is company's slug
       res.render('pages/companies/company', {
-        companies,
+        currentCompany,
         name
       })
   }

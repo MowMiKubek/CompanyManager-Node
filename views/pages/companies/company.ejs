@@ -1,4 +1,4 @@
-<% const currentCompany = companies.find(x => x.slug === name) %>
+<%# const currentCompany = companies.find(x => x.slug === name) %>
 <% if (currentCompany) { %>
   <h1>Firma: <%= currentCompany.name %> (aka <%= currentCompany.slug %>)</h1>
   <h3>Liczba pracowników: <%= currentCompany.employeesCount %></h3>
@@ -10,13 +10,5 @@
 <div class="d-flex">
   <a class="link-warning px-1" href="/admin/<%= name%>/editcompany">Edytuj dane firmy</a>
   <a class="link-danger px-1" onclick='return confirm("Czy na pewno chcesz usunąć firmę?")' 
-  href="/admin/<%= name%>/deletecompany">Usuń firmę (jeszcze nie działa)</a>
+  href="/admin/<%= name%>/deletecompany">Usuń firmę</a>
 </div>
-
-<h2>Pozostałe firmy: </h2>
-
-<ul>
-  <% companies.forEach(company => { %>
-    <li><a href="/firmy/<%= company.slug %>"><%= company.name %></a></li>
-  <% }); %>
-</ul>

@@ -16,9 +16,11 @@
                 <div class="card-subtitle text-muted"><%= company.slug %></div>
                 <p>Pracowników: <%= company.employeesCount %></p>
                 <a class="btn btn-primary" href="/firmy/<%= company.slug %>">Zobacz</a>
-                <a class="btn btn-warning" href="/admin/<%= company.slug %>/editcompany">Edytuj</a>
-                <a class="btn btn-danger" onclick='return confirm("Czy na pewno chcesz usunąć firmę?")'
-                href="/admin/<%= company.slug %>/deletecompany">Usuń</a>
+                <% if(user) {%>
+                  <a class="btn btn-warning" href="/admin/<%= company.slug %>/editcompany">Edytuj</a>
+                  <a class="btn btn-danger" onclick='return confirm("Czy na pewno chcesz usunąć firmę?")'
+                  href="/admin/<%= company.slug %>/deletecompany">Usuń</a>
+                <% } %>
               </div>
             </div>
           <% }); %>
