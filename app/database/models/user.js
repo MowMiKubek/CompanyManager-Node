@@ -31,10 +31,11 @@ UserSchema.path('password').set(password => {
 */
 
 // pre - just before saving user to DB
-UserSchema.pre('password', function(next) {
+UserSchema.pre('save', function(next) {
     const user = this;
     const salt = bcrypt.genSaltSync(10);            // getSalt is async
-    const hash = bcrypt.hashSync(password, salt);   // as well as hash
+    const hash = bcrypt.hashSync(user.password, salt);   // as well as hash
+    if(!user.isModified('password')) return next();
     user.password = hash; // after validation set password to it's hash
     next();
 });
@@ -45,6 +46,12 @@ UserSchema.post('save', function (err, doc, next)  {
     };
     next(err);
 });
+
+UserSchema.methods = {
+    checkPassword(password) {
+        return bcrypt.compareSync(password, this.password);
+    }
+}
 
 const User = mongoose.model('User', UserSchema);
 

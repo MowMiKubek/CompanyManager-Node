@@ -32,7 +32,7 @@ class UserController{
             if(!user) 
                 throw new Error('');
                 
-            const isValidPass = true; //user.checkPassword(req.body.password);
+            const isValidPass = user.checkPassword(req.body.password);
             if(!isValidPass)
                 throw new Error('');
             // login
