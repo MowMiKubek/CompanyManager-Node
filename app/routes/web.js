@@ -20,6 +20,7 @@ router.get('/zarejestruj', userController.showRegister);
 router.post('/zarejestruj', userController.register);
 router.get('/zaloguj', userController.showLogin);
 router.post('/zaloguj', userController.login);
+router.get('/wyloguj', userController.logout);
 
 router.get('*', pageController.errorRoute);
 

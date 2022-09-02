@@ -31,7 +31,8 @@ app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 
 // middleware passing URL to render engine
-app.use('/', require('./middleware/view-variables'))
+app.use('/', require('./middleware/view-variables'));
+app.use('/', require('./middleware/user-middleware'));
 
 // set up routes (this must be here, after setting up views etc.)
 app.use(require('./routes/web'));

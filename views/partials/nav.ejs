@@ -19,15 +19,19 @@
           <a class="nav-link <%- url === '/admin/addcompany' ? 'active' : '' %>" href="/admin/addcompany">Dodaj firmę</a>
         </li>
         </li>
-        <li class="nav-item">
-          <a class="nav-link <%- url.includes('/register') ? 'active' : '' %>" href="/zarejestruj">Dodaj użytkownika
-          </a>
-        </li>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link <%- url.includes('/zaloguj') ? 'active' : '' %>" href="/zaloguj">Logowanie
-          </a>
-        </li>
+        <% if (!user) { %>
+          <li class="nav-item">
+            <a class="nav-link <%- url.includes('/register') ? 'active' : '' %>" href="/zarejestruj">Dodaj użytkownika</a>
+          </li>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link <%- url.includes('/zaloguj') ? 'active' : '' %>" href="/zaloguj">Logowanie</a>
+          </li>
+        <% } else { %>
+          <li class="nav-item">
+            <a class="nav-link" href="/wyloguj">Wyloguj</a>
+          </li>
+        <% } %>
       </ul>
     </div>
   </div>
