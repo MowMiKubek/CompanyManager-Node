@@ -22,16 +22,22 @@ const companySchema = new Schema({
       type: Number,
       min: [1, "Liczba pracowników musi być dodatnia"],
       default: 1,
+    },
+    user: {
+      type: mongoose.Types.ObjectId,
+      required: true,
+      ref: 'User'
     }
 }, {collection: "companies"});
 
 class CompanyController {
     
-addCompany = async (data) => {
+addCompany = async (data, _id) => {
     const newCompany = new Company({
       slug: data.slug,
       name: data.name,
-      employeesCount: data.employeesCount
+      employeesCount: data.employeesCount,
+      user: _id
     });
     try{
     await newCompany.save();
@@ -90,7 +96,7 @@ getCompanies = async (params, perPage) => {
     }
   
     // exec
-    const result = await query.exec();
+    const result = await query.populate('user').exec(); // wypełnij pole user danymi danego użytkownika
     const resultsCount = await Company.find(queryParams).count();
     result.push(resultsCount)
     return result;

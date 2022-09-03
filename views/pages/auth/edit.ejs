@@ -1,9 +1,10 @@
-<h1>Rejestracja</h1>
+<h1>Edycja</h1>
 
 <form method="POST">
     <div class="form-group mb-2">
         <label for="email">Adres email</label>
-        <input type="email" 
+        <input 
+            type="email"
             id="email" 
             name="email" 
             placeholder="nazwa@domena.xx" 
@@ -19,9 +20,10 @@
             <div class='invalid-feedback'><%= errors.email.message %></div>
         <% } %>
     </div>
-    <div class="form-group mb-3">
+        <div class="form-group mb-3">
         <label for="password">Hasło</label>
-        <input type="password" 
+        <input 
+            type="password" 
             id="password" 
             name="password" 
             placeholder="Hasło" 
@@ -29,14 +31,12 @@
             <% if (errors?.password) { %>
                 is-invalid
             <% } %>"
-            <% if (form) {%>
-                value="<%= form.password%>"
-            <% } %>
-        required>
+        >
         <% if (errors?.password) { %>
             <div class='invalid-feedback'><%= errors.password.message %></div>
         <% } %>
     </div>
+    
     <div class="form-group mb-3">
         <label for="firstname">Imie</label>
         <input type="text" 
@@ -73,5 +73,5 @@
             <div class='invalid-feedback'><%= errors.lastname.message %></div>
         <% } %>
     </div>
-    <button type="submit" class="btn btn-primary">Zarejestruj</button>
+    <button type="submit" class="btn btn-primary">Edytuj</button>
 </form>

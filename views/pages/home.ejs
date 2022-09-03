@@ -1,5 +1,6 @@
 <h1>To jest strona główna</h1>
 
 <% if(user) { %>
-    <p>Witaj <%= user.email %> (<%- user._id %>)</p>
+    <p>Witaj <%= user.firstname %> <%= user.lastname%></p>
+    <p>Dane:  <%= user.email %> (<%- user._id %>)</p>
 <% } %>

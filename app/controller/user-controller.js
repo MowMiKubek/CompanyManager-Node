@@ -7,10 +7,7 @@ class UserController{
 
     register = async (req, res) => {
         try{
-            const newUser = new User({
-                email: req.body.email,
-                password: req.body.password
-            });
+            const newUser = new User(req.body);
             await newUser.save();
             res.redirect('/');
         }
@@ -36,10 +33,7 @@ class UserController{
             if(!isValidPass)
                 throw new Error('');
             // login
-            req.session.user = {
-                email: user.email,
-                _id: user._id
-            }
+            req.session.user = user;
             res.redirect('/');
         }catch(e){
             res.render('pages/auth/login', {
@@ -47,6 +41,31 @@ class UserController{
                 errors: true
             });
             return;
+        }
+    }
+
+    showEditProfile = (req, res) => {
+
+        res.render('pages/auth/edit', {
+            form: req.session.user
+        });
+    }
+
+    editProfile = async (req, res) => {
+        const user = await User.findById(req.session.user._id);
+        user.email = req.body.email;
+        user.firstname = req.body.firstname;
+        user.lastname = req.body.lastname;
+        
+        try{
+            await user.save();
+            req.session.user = user;
+            res.redirect('/admin/profil');
+        }catch(e){
+            res.render('pages/auth/edit', {
+                errors: e.errors,
+                form: req.body
+            });
         }
     }
 

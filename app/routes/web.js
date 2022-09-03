@@ -18,8 +18,13 @@ router.get('/admin/:name/deletecompany', pageController.deleteCompany);
 
 router.get('/zarejestruj', userController.showRegister);
 router.post('/zarejestruj', userController.register);
+
 router.get('/zaloguj', userController.showLogin);
 router.post('/zaloguj', userController.login);
+
+router.get('/admin/profil', userController.showEditProfile);
+router.post('/admin/profil', userController.editProfile);
+
 router.get('/wyloguj', userController.logout);
 
 router.get('*', pageController.errorRoute);

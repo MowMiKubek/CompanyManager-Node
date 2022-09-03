@@ -47,7 +47,7 @@ class PageController {
 
   addCompany = async (req, res) => {
     try{
-      await companyController.addCompany(req.body);
+      await companyController.addCompany(req.body, req.session.user._id);
       res.redirect('/firmy');
     }
     catch(err){

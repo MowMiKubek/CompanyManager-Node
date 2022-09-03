@@ -18,8 +18,18 @@ const UserSchema = new Schema({
         type: String,
         required: [true, "Hasło jest wymagane"],
         minLength: [4, "Minimalna długość hasła to 4"]
+    },
+    firstname: {
+        type: String
+    },
+    lastname: {
+        type: String
     }
 });
+
+UserSchema.virtual('ceo').get(function() {
+    return `${this.firstname} ${this.lastname[0]}.`;
+})
 
 // incorrect!!! This approach bypasses password validation (required and minLength)
 /*

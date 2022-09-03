@@ -1,6 +1,13 @@
 <h1>Lista firm</h1>
   <form>
       <%- include('partials/search.ejs') %>
+      <% if(user) { %>
+      <div class="row">
+        <div class="col">
+          <a href="/admin/addcompany" class="btn btn-success">Dodaj nową firmę</a>
+        </div>
+      </div>
+      <% } %>
     <div class="row">
       <div class="col-3">
         <%- include('partials/filter.ejs') %>
@@ -14,6 +21,8 @@
               <div class="card-body">
                 <div class="card-title"><%= company.name %></div>
                 <div class="card-subtitle text-muted"><%= company.slug %></div>
+                <p>Właściciel: <%= company.user?.ceo %></p>
+                <p>Kontakt: <%= company.user?.email %></p>
                 <p>Pracowników: <%= company.employeesCount %></p>
                 <a class="btn btn-primary" href="/firmy/<%= company.slug %>">Zobacz</a>
                 <% if(user) {%>
