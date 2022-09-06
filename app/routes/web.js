@@ -1,6 +1,7 @@
 const express = require('express');
 const pageController = require('../controller/page-controller.js');
 const userController = require('../controller/user-controller');
+const upload = require('../services/uploadimage');
 
 const router = new express.Router();
 
@@ -12,9 +13,11 @@ router.get('/admin/addcompany', pageController.showAddCompany);
 router.post('/admin/addcompany', pageController.addCompany);
 
 router.get('/admin/:name/editcompany', pageController.showEditCompany);
-router.post('/admin/:name/editcompany', pageController.editCompany);
+router.post('/admin/:name/editcompany', upload.single('image'), pageController.editCompany);
 
 router.get('/admin/:name/deletecompany', pageController.deleteCompany);
+
+router.get('/admin/:name/deleteimage', pageController.deleteImage);
 
 router.get('/zarejestruj', userController.showRegister);
 router.post('/zarejestruj', userController.register);

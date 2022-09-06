@@ -1,4 +1,4 @@
-const {companyController} = require('../database/db-mongoose.js')
+const {companyController} = require('../database/db-mongoose.js');
 
 class PageController {
   homeRoute = (req, res) => {
@@ -71,7 +71,7 @@ class PageController {
 
   editCompany = async (req, res) => {
     try{
-      await companyController.editCompany(req.params.name, req.body);
+      await companyController.editCompany(req.params.name, req.body, req.file);
       res.redirect('/firmy');
     }
     catch(err){
@@ -92,6 +92,12 @@ class PageController {
     finally{
       res.redirect('/firmy');
     }
+  }
+
+  deleteImage = async (req, res) => {
+    const name = req.params.name;
+    await companyController.deleteImage(name);
+    res.redirect('/');
   }
 
   errorRoute = (req, res) => {

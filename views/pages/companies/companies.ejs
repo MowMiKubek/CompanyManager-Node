@@ -19,17 +19,24 @@
           <% companies.forEach(company => { %>
             <div class="card bg-light mb-3" id="firma">
               <div class="card-body">
-                <div class="card-title"><%= company.name %></div>
-                <div class="card-subtitle text-muted"><%= company.slug %></div>
-                <p>Właściciel: <%= company.user?.ceo %></p>
-                <p>Kontakt: <%= company.user?.email %></p>
-                <p>Pracowników: <%= company.employeesCount %></p>
-                <a class="btn btn-primary" href="/firmy/<%= company.slug %>">Zobacz</a>
-                <% if(user) {%>
-                  <a class="btn btn-warning" href="/admin/<%= company.slug %>/editcompany">Edytuj</a>
-                  <a class="btn btn-danger" onclick='return confirm("Czy na pewno chcesz usunąć firmę?")'
-                  href="/admin/<%= company.slug %>/deletecompany">Usuń</a>
-                <% } %>
+                <div class="row">
+                  <div class="col-3">
+                    <img src="/upload/<%- company.image %>" class="img-fluid" alt="">
+                  </div>
+                  <div class="col-9">
+                    <div class="card-title"><%= company.name %></div>
+                    <div class="card-subtitle text-muted"><%= company.slug %></div>
+                    <p>Właściciel: <%= company.user?.ceo %></p>
+                    <p>Kontakt: <%= company.user?.email %></p>
+                    <p>Pracowników: <%= company.employeesCount %></p>
+                    <a class="btn btn-primary" href="/firmy/<%= company.slug %>">Zobacz</a>
+                    <% if(user) {%>
+                      <a class="btn btn-warning" href="/admin/<%= company.slug %>/editcompany">Edytuj</a>
+                      <a class="btn btn-danger" onclick='return confirm("Czy na pewno chcesz usunąć firmę?")'
+                      href="/admin/<%= company.slug %>/deletecompany">Usuń</a>
+                    <% } %>
+                  </div>
+                </div>
               </div>
             </div>
           <% }); %>

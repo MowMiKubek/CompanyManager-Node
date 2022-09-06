@@ -1,4 +1,5 @@
-const mongoose = require('mongoose')
+const fs = require('fs');
+const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 const {checkForbidenString} = require('../validators.js');
@@ -27,7 +28,8 @@ const companySchema = new Schema({
       type: mongoose.Types.ObjectId,
       required: true,
       ref: 'User'
-    }
+    },
+    image: String
 }, {collection: "companies"});
 
 class CompanyController {
@@ -47,11 +49,16 @@ addCompany = async (data, _id) => {
     }
   }
   
-editCompany = async (slug, update) => {
+editCompany = async (slug, update, file) => {
     const company = await Company.findOne({slug: slug});
     company.name = update.name;
     company.slug = update.slug;
     company.employeesCount = update.employeesCount;
+
+    if(file.filename && company.image){
+      fs.unlinkSync('public/upload/' + company.image);
+    }
+    company.image = file.filename;
     try{
       await company.save();
     }
@@ -62,12 +69,29 @@ editCompany = async (slug, update) => {
   
 deleteCompany = async (slug) => {
     try{
-      await Company.findOneAndDelete({slug: slug});
+      const company = await Company.findOne({slug});
+      const image = company.image;
+      if(image){
+        fs.unlinkSync('public/upload/' + image);
+      }
+      await Company.findOneAndDelete({slug});
     }catch (err){
       throw err;
     }
   }
   
+deleteImage = async (slug) => {
+  try{
+    const company = await Company.findOne({slug});
+    const filename = company.image;
+    fs.unlinkSync('public/upload/' + filename);
+    company.image = '';
+    await company.save();
+  }
+  catch(e){
+    console.log(e);
+  }
+}
 getCompanies = async (params, perPage) => {
     const { q, sort, countmin, countmax, page } = params;
     let queryParams = {};
