@@ -1,4 +1,5 @@
 const {companyController} = require('../database/db-mongoose.js');
+const {Parser} = require('json2csv');
 
 class PageController {
   homeRoute = (req, res) => {
@@ -98,6 +99,36 @@ class PageController {
     const name = req.params.name;
     await companyController.deleteImage(name);
     res.redirect('/');
+  }
+
+  getCSV = async (req, res) => {
+    const fields = [
+      {
+        label: "Nazwa firmy",
+        value: 'name'
+      },
+      {
+        label: "Skrót",
+        value: "slug"
+      },
+      {
+        label: "Liczba pracowników",
+        value: "employeesCount"
+      },
+      {
+        label: "Właściciel",
+        value: "user.ceo"
+      }
+    ];
+    const filename = 'companies.csv';
+    const companies = await companyController.getAllCompanies();
+    console.log(companies);
+    const json2csv = new Parser({ fields });
+    const csv = json2csv.parse(companies);
+
+    res.header({'Content-type': 'text/csv'});
+    res.attachment(filename);
+    res.send(csv);
   }
 
   errorRoute = (req, res) => {

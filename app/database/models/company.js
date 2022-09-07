@@ -92,8 +92,8 @@ deleteImage = async (slug) => {
     console.log(e);
   }
 }
-getCompanies = async (params, perPage) => {
-    const { q, sort, countmin, countmax, page } = params;
+getCompanies = async (params, perPage = 2) => {
+    let { q, sort, countmin, countmax, page } = params || {};
     let queryParams = {};
   
     // search
@@ -125,7 +125,17 @@ getCompanies = async (params, perPage) => {
     result.push(resultsCount)
     return result;
   }
-  
+  getAllCompanies = async () => {
+    try{
+      const query = Company.find();
+      const result = await query.populate('user').exec();
+      return result;
+    }
+    catch(e){
+      console.log("getAllCompanies error");
+      return {};
+    }
+  }
 getCompany = async (companyName) => {
     const result = await Company.findOne({slug: companyName});
     return result;

@@ -30,6 +30,8 @@ router.post('/admin/profil', userController.editProfile);
 
 router.get('/wyloguj', userController.logout);
 
+router.get('/getcsv', pageController.getCSV);
+
 router.get('*', pageController.errorRoute);
 
 module.exports = router;
