@@ -28,6 +28,7 @@ app.use(express.static('public'));
 
 // set up body parser
 app.use(express.urlencoded({ extended: true }));
+app.use(express.json());
 app.use(cookieParser());
 
 // middleware passing URL to render engine
@@ -36,6 +37,7 @@ app.use('/', require('./middleware/user-middleware'));
 app.use('/admin', require('./middleware/is-auth-middleware'));
 
 // set up routes (this must be here, after setting up views etc.)
+app.use('/api', require('./routes/api'));
 app.use(require('./routes/web'));
 
 module.exports = app;

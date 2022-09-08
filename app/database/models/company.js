@@ -55,10 +55,10 @@ editCompany = async (slug, update, file) => {
     company.slug = update.slug;
     company.employeesCount = update.employeesCount;
 
-    if(file.filename && company.image){
+    if(file?.filename && company.image){
       fs.unlinkSync('public/upload/' + company.image);
+      company.image = file.filename;
     }
-    company.image = file.filename;
     try{
       await company.save();
     }
