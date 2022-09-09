@@ -1,5 +1,7 @@
-const {companyController} = require('../database/db-mongoose.js');
+const Company = require('../database/db-mongoose.js');
+const fs = require('fs');
 const {Parser} = require('json2csv');
+
 
 class PageController {
   homeRoute = (req, res) => {
@@ -17,28 +19,50 @@ class PageController {
   companiesRoute = async (req, res) => {
     const page = req.query.page || 1;
     const perPage = 2;
-    const queryResult = await companyController.getCompanies(req.query, perPage);
-    
-    // get results from DB. Last is number how many records there are
-    const resultsCount = queryResult[queryResult.length-1];
-    queryResult.pop();
+   // const queryResult = await companyController.getCompanies(req.query, perPage);
+    let { q, sort, countmin, countmax } = req.query || {}; 
+    let queryParams = {};
+
+    // sort
+    if(q) { queryParams.name = {$regex: q, $options: 'i'}}
+
+    // filter
+    if(countmin || countmax){
+      queryParams.employeesCount = {};
+      if(countmin) { queryParams.employeesCount.$gte = countmin; }
+      if(countmax) { queryParams.employeesCount.$lte = countmax; }
+    }
+  
+    // pagination
+    let query = Company.find(queryParams);
+    query.skip((page-1) * perPage);
+    query = query.limit(perPage);
+
+    if(sort){
+      const s = sort.split('|');
+      query = query.sort({ [s[0]]: s[1] });
+    }
+
+    const companies = await query.populate('user').exec(); // wypełnij pole user danymi danego użytkownika
+    const resultsCount = await Company.find(queryParams).count();
 
     const pagesCount = Math.ceil(resultsCount / perPage);
 
     res.render('pages/companies/companies', { 
-      companies: queryResult,
+      companies,
       page,
       pagesCount,
       resultsCount
     });
   };
 
+
   companyRoute = async (req, res) => {
-      const name = req.params.name;
-      const currentCompany = await companyController.getCompany(name); // name is company's slug
+      const slug = req.params.name;
+      const currentCompany = await Company.findOne({slug}); // name is company's slug
       res.render('pages/companies/company', {
         currentCompany,
-        name
+        name: slug
       })
   }
 
@@ -47,8 +71,14 @@ class PageController {
   };
 
   addCompany = async (req, res) => {
+    const newCompany = new Company({
+      slug: req.body.slug,
+      name: req.body.name,
+      employeesCount: req.body.employeesCount,
+      user: req.session.user._id
+    });
     try{
-      await companyController.addCompany(req.body, req.session.user._id);
+      await newCompany.save();
       res.redirect('/firmy');
     }
     catch(err){
@@ -60,18 +90,25 @@ class PageController {
   }
 
   showEditCompany = async (req, res) => {
-    let result = await companyController.getCompany(req.params.name); // name as slug
-    if(!result) {
+    let company = await Company.findOne({ slug: req.params.name}); // name as slug
+    if(!company) {
       res.redirect('/firmy');
       return;
     }
-    const company = this.truncateCompany(result);
     res.render('pages/companies/edit', {form: company});
   };
 
   editCompany = async (req, res) => {
     try{
-      await companyController.editCompany(req.params.name, req.body, req.file || {});
+      const company = await Company.findOne({slug: req.body.slug});
+      company.name = req.body.name ? req.body.name : company.name;
+      company.slug = req.body.slug ? req.body.slug : company.slug;
+      company.employeesCount = req.body.employeesCount ? req.body.employeesCount : company.employeesCount;
+      //await companyController.editCompany(req.params.name, req.body, req.file || {});
+      
+      if(req.file.filename)
+        company.image = req.file.filename;
+      await company.save();
       res.redirect('/firmy');
     }
     catch(err){
@@ -85,10 +122,18 @@ class PageController {
 
   deleteCompany = async (req, res) => {
     try{
-      companyController.deleteCompany(req.params.name);
+      const slug = req.params.name;
+      const company = await Company.findOne({slug});
+      let image;
+      if(company)
+        image = company.image;
+      if(image){
+        fs.unlinkSync('public/upload/' + image);
+      }
+      await Company.findOneAndDelete({slug});
     }
     catch(err){
-      console.log("Wystąpił jakiś nieszkodliwy błąd");
+      console.log(err);
     }
     finally{
       res.redirect('/firmy');
@@ -97,8 +142,19 @@ class PageController {
 
   deleteImage = async (req, res) => {
     const name = req.params.name;
-    await companyController.deleteImage(name);
-    res.redirect('/');
+    try{
+      const company = await Company.findOne({slug});
+      const filename = company.image;
+      fs.unlinkSync('public/upload/' + filename);
+      company.image = '';
+      await company.save();
+    }
+    catch(e){
+      console.log(e);
+    }
+    finally{
+      res.redirect('/');
+    }
   }
 
   getCSV = async (req, res) => {
@@ -121,8 +177,8 @@ class PageController {
       }
     ];
     const filename = 'companies.csv';
-    const companies = await companyController.getAllCompanies();
-    console.log(companies);
+    const query = Company.find();
+    const companies = await query.populate('user').exec();
     const json2csv = new Parser({ fields });
     const csv = json2csv.parse(companies);
 
