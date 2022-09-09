@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const bcrypt = require('bcrypt');
+const randomstring = require('randomstring');
 
 const Schema = mongoose.Schema;
 

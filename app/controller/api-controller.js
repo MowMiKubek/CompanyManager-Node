@@ -14,18 +14,18 @@ class ApiController{
             res.status(201).send(company);
         }catch(e){
             console.log(e.message);
-            res.sendStatus(422).json(e.errors);
+            res.status(422).json(e.errors);
         }
     }
     async updateCompany(req, res) {
         const slug = req.params.slug;
         try{
-            await databaseQuery.editCompany(slug, req.body, null);
+            await databaseQuery.editCompany(slug, req.body, req.file || {});
             const company = await databaseQuery.getCompany(req.body.slug);
             res.status(202).send(company);
         }catch(e){
             console.log(e.message);
-            res.sendStatus(422).json(e.errors);
+            res.status(422).json(e.errors);
         }
     }
     async deleteCompany(req, res) {

@@ -66,16 +66,16 @@ class PageController {
       return;
     }
     const company = this.truncateCompany(result);
-    console.log("edit", company);
     res.render('pages/companies/edit', {form: company});
   };
 
   editCompany = async (req, res) => {
     try{
-      await companyController.editCompany(req.params.name, req.body, req.file);
+      await companyController.editCompany(req.params.name, req.body, req.file || {});
       res.redirect('/firmy');
     }
     catch(err){
+      console.log(err);
       res.render('pages/companies/edit', {
         errors: err.errors,
         form: req.body

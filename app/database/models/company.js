@@ -51,14 +51,15 @@ addCompany = async (data, _id) => {
   
 editCompany = async (slug, update, file) => {
     const company = await Company.findOne({slug: slug});
-    company.name = update.name;
-    company.slug = update.slug;
-    company.employeesCount = update.employeesCount;
-
-    if(file?.filename && company.image){
+    company.name = update.name ? update.name : company.name;
+    company.slug = update.slug ? update.slug : company.slug;
+    company.employeesCount = update.employeesCount ? update.employeesCount : company.employeesCount;
+    // company.employeesCount = 0;
+    if(file.filename && company.image){
       fs.unlinkSync('public/upload/' + company.image);
-      company.image = file.filename;
     }
+    if(file.filename)
+      company.image = file.filename;
     try{
       await company.save();
     }
