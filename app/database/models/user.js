@@ -25,7 +25,8 @@ const UserSchema = new Schema({
     },
     lastname: {
         type: String
-    }
+    },
+    apiToken: String
 });
 
 UserSchema.virtual('ceo').get(function() {
@@ -48,6 +49,13 @@ UserSchema.pre('save', function(next) {
     const hash = bcrypt.hashSync(user.password, salt);   // as well as hash
     if(!user.isModified('password')) return next();
     user.password = hash; // after validation set password to it's hash
+    next();
+});
+
+UserSchema.pre('save', function(next) {
+    if(this.isNew){
+        this.apiToken = randomstring.generate();
+    }
     next();
 });
 

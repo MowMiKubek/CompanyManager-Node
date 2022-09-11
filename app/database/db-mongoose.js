@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 const {dbURL} = require('../config.js');
-const {Company} = require('./models/company');
+const Company = require('./models/company');
 const User = require('./models/user');
 
 

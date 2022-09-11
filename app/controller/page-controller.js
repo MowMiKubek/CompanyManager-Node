@@ -1,4 +1,4 @@
-const Company = require('../database/db-mongoose.js');
+const {Company} = require('../database/db-mongoose.js');
 const fs = require('fs');
 const {Parser} = require('json2csv');
 
@@ -75,7 +75,8 @@ class PageController {
       slug: req.body.slug,
       name: req.body.name,
       employeesCount: req.body.employeesCount,
-      user: req.session.user._id
+      //user: req.session.user._id
+      user: req.user._id
     });
     try{
       await newCompany.save();
