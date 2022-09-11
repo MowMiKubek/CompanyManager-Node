@@ -1,4 +1,4 @@
-const Company = require('../database/models/company');
+const Company = require('../../database/models/company');
 
 class ApiController{
     async getCompanies(req, res) {
@@ -13,7 +13,7 @@ class ApiController{
                 slug: req.body.slug,
                 name: req.body.name,
                 employeesCount: req.body.employeesCount,
-                user: req.body.user
+                user: req.user
               });
             //const company = await databaseQuery.getCompany(req.body.slug);
             await newCompany.save();
@@ -25,7 +25,7 @@ class ApiController{
     }
     async updateCompany(req, res) {
         const slug = req.params.slug;
-        const file = req.file;
+        const file = req.file || '';
         try{
             const company = await Company.findOne({slug});
             company.name = req.body.name ? req.body.name : company.name;
